@@ -1,6 +1,6 @@
 import math
 
-class Viga():
+class Element():
     def __init__(self, point_a, point_b, area, E,nodes):
         self.point_a = point_a
         self.point_b =  point_b
@@ -22,5 +22,4 @@ class Viga():
         ])
         self.K = self.K * E*A/L 
     
-    def createM(self):
 
