@@ -21,10 +21,10 @@ class Ponte():
             self.Kg[element.gdl[2]:element.gdl[3]+1,element.gdl[0]:element.gdl[1]+1] += element.K[2:4,0:2]
 
     def condicContorno(self):
-            Kg_c = np.delete(self.Kg,self.restric_matrix,0)
-            Kg_c = np.delete(Kg_c,self.restric_matrix,1)
-            F_c = np.delete(self.F, self.restric_matrix)
-            u_temp = np.linalg.inv(Kg_c).dot(F_c)
+            self.Kg_c = np.delete(self.Kg,self.restric_matrix,0)
+            self.Kg_c = np.delete(self.Kg_c,self.restric_matrix,1)
+            self.F_c = np.delete(self.F, self.restric_matrix)
+            u_temp = np.linalg.inv(self.Kg_c).dot(self.F_c)
             j = 0
             for i in range(len(self.U)):
                 if i not in self.restric_matrix:
@@ -33,7 +33,44 @@ class Ponte():
     
     def getReact(self):
         return self.Kg.dot(self.U)
-        
+    
+    def jacobi(self, iteration, tolerance):
+        X = [0,0,0]
+        i = 0
+        temp1 = ( self.F_c[0] - self.Kg_c[0][1] * X[1] - self.Kg_c[0][2] * X[2])/self.Kg_c[0][0]
+        temp2 = ( self.F_c[1] - self.Kg_c[1][0] * X[0] - self.Kg_c[1][2] * X[2])/self.Kg_c[1][1]
+        temp3 = ( self.F_c[2] - self.Kg_c[2][0] * X[0] - self.Kg_c[2][1] * X[1])/self.Kg_c[2][2]
+        last = X
+        X = [temp1,temp2,temp3]
+
+        current = abs((max(X)-max(last))/max(X)*100)
+        while(current>tolerance or i<iteration):
+            temp1 = ( self.F_c[0] - self.Kg_c[0][1] * X[1] - self.Kg_c[0][2] * X[2])/self.Kg_c[0][0]
+            temp2 = ( self.F_c[1] - self.Kg_c[1][0] * X[0] - self.Kg_c[1][2] * X[2])/self.Kg_c[1][1]
+            temp3 = ( self.F_c[2] - self.Kg_c[2][0] * X[0] - self.Kg_c[2][1] * X[1])/self.Kg_c[2][2]
+            last = X
+            X = [temp1,temp2,temp3]
+            i+=1
+            current = abs((max(X)-max(last))/max(X)*100)
+        return X
+    
+    def gauss(self, iteration, tolerance):
+        X = [0,0,0]
+        i = 0
+        last = X
+        X[0]= ( self.F_c[0] - self.Kg_c[0][1] * X[1] - self.Kg_c[0][2] * X[2])/self.Kg_c[0][0]
+        X[1] = ( self.F_c[1] - self.Kg_c[1][0] * X[0] - self.Kg_c[1][2] * X[2])/self.Kg_c[1][1]
+        X[2] = ( self.F_c[2] - self.Kg_c[2][0] * X[0] - self.Kg_c[2][1] * X[1])/self.Kg_c[2][2]
+
+        current = abs((max(X)-max(last))/max(X)*100)
+        while(current>tolerance or i<iteration):
+            X[0] = ( self.F_c[0] - self.Kg_c[0][1] * X[1] - self.Kg_c[0][2] * X[2])/self.Kg_c[0][0]
+            X[1] = ( self.F_c[1] - self.Kg_c[1][0] * X[0] - self.Kg_c[1][2] * X[2])/self.Kg_c[1][1]
+            X[2] = ( self.F_c[2] - self.Kg_c[2][0] * X[0] - self.Kg_c[2][1] * X[1])/self.Kg_c[2][2]
+            last = X
+            i+=1
+            current = abs((max(X)-max(last))/max(X)*100)
+        return X
             
 
 

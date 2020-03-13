@@ -25,4 +25,6 @@ ponte.getKg()
 ponte.condicContorno()
 
 #FORÇAS DE REAÇÃO
-print(ponte.getReact())
+print("Forças de reação: ", ponte.getReact())
+print("\nCálculo de U utilizando método de Jacobi: ", ponte.jacobi(10,0.001))
+print("\n Cálculo de U utilizando o método de Gauss: ", ponte.gauss(10,0.1))
