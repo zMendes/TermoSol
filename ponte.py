@@ -1,4 +1,4 @@
-
+import numpy as np
 
 class Ponte():
     def __init__(self, elements, F, U, n_nos):
@@ -14,10 +14,10 @@ class Ponte():
     
     def getKg(self):
         for element in self.elements:
-            self.Kg[element.gdl[0]:element.gdl[1]+1][element.gdl[0]:element.gdl[1]+1] += element.k[0:2][0:2]
-            self.Kg[element.gdl[2]:element.gdl[3]+1][element.gdl[2]:element.gdl[3]+1] += element.k[2:4][2:4] 
-            self.Kg[element.gdl[0]:element.gdl[1]+1][element.gdl[2]:element.gdl[3]+1] += element.K[0:2][2:4] 
-            self.Kg[element.gdl[2]:element.gdl[3]+1][element.gdl[0]:element.gdl[1]+1] += element.k[2:4][0:2] 
+            self.Kg[element.gdl[0]:element.gdl[1]+1,element.gdl[0]:element.gdl[1]+1] += element.K[0:2,0:2]
+            self.Kg[element.gdl[2]:element.gdl[3]+1,element.gdl[2]:element.gdl[3]+1] += element.K[2:4,2:4] 
+            self.Kg[element.gdl[0]:element.gdl[1]+1,element.gdl[2]:element.gdl[3]+1] += element.K[0:2,2:4] 
+            self.Kg[element.gdl[2]:element.gdl[3]+1,element.gdl[0]:element.gdl[1]+1] += element.K[2:4,0:2] 
 
 
 
