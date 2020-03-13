@@ -1,5 +1,5 @@
 import math
-
+import numpy as np
 class Element():
     def __init__(self, point_a, point_b, area, E,nodes):
         self.point_a = point_a
@@ -10,16 +10,15 @@ class Element():
 
     
     def getK(self):
-        L = math.sqrt((point_b[0]-point_a[0])**2 + (point_b[1]-point_a[1])**2)
-        sen = (point_b[1]-point_a[1])/L
-        cos = (point_b[0]-point_a[0])/L
+        L = math.sqrt((self.point_b[0]-self.point_a[0])**2 + (self.point_b[1]-self.point_a[1])**2)
+        sen = (self.point_b[1]-self.point_a[1])/L
+        cos = (self.point_b[0]-self.point_a[0])/L
 
-        self.K = np.array([
+        self.K = (self.E*self.area/L) * np.array([
             [cos**2,cos*sen,-(cos**2),-(cos*sen)],
-            [cos*sen,sen**2,-(cos*sen),-(s**2)],
+            [cos*sen,sen**2,-(cos*sen),-(sen**2)],
             [-(cos**2),-(cos*sen),cos**2,cos*sen],
-            [-(cos*sen),-(sen**2),cos*sen,s**2]
+            [-(cos*sen),-(sen**2),cos*sen,sen**2]
         ])
-        self.K = self.K * E*A/L 
     
 
