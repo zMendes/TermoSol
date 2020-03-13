@@ -10,16 +10,11 @@ from ponte import Ponte
 element = []
 nodes = []
 dict_nos = {}
-U = np.array([n_elements*2])
-
+U = np.zeros([n_elements*2])
 for i in param:
     nodes.append(np.array([int(i[0]),int(i[1])]))
-# print(nodes)
-
-
 for i in range(0,n_nos):
     dict_nos[i+1] = [nos_coord[0][i], nos_coord[1][i]]
-    
 for i in range(0,n_nos):    
     element.append(Element(dict_nos.get(int(param[i][0])),dict_nos.get(int(param[i][1])),param[i][3],param[i][2],nodes[i]))
 
@@ -28,3 +23,6 @@ ponte = Ponte(element,force_matrix,U,n_nos,restric_matrix)
 ponte.getKis()
 ponte.getKg()
 ponte.condicContorno()
+
+#FORÇAS DE REAÇÃO
+print(ponte.getReact())

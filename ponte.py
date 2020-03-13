@@ -21,12 +21,19 @@ class Ponte():
             self.Kg[element.gdl[2]:element.gdl[3]+1,element.gdl[0]:element.gdl[1]+1] += element.K[2:4,0:2]
 
     def condicContorno(self):
-            self.Kg = np.delete(self.Kg,self.restric_matrix,0)
-            self.Kg = np.delete(self.Kg,self.restric_matrix,1)
-            self.F = np.delete(self.F, self.restric_matrix)
-            # self.U = np.linalg.inv(self.Kg) * self.F
-            self.U = np.linalg.inv(self.Kg).dot( self.F)
+            Kg_c = np.delete(self.Kg,self.restric_matrix,0)
+            Kg_c = np.delete(Kg_c,self.restric_matrix,1)
+            F_c = np.delete(self.F, self.restric_matrix)
+            u_temp = np.linalg.inv(Kg_c).dot(F_c)
+            j = 0
+            for i in range(len(self.U)):
+                if i not in self.restric_matrix:
+                    self.U[i] = u_temp[j]
+                    j +=1
     
+    def getReact(self):
+        return self.Kg.dot(self.U)
+        
             
 
 
