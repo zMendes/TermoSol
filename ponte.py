@@ -34,28 +34,8 @@ class Ponte():
     def getReact(self):
         return self.Kg.dot(self.U)
     
-    def jacobi(self, iteration, tolerance):
-        X = [0,0,0]
-        i = 0
-        temp1 = ( self.F_c[0] - self.Kg_c[0][1] * X[1] - self.Kg_c[0][2] * X[2])/self.Kg_c[0][0]
-        temp2 = ( self.F_c[1] - self.Kg_c[1][0] * X[0] - self.Kg_c[1][2] * X[2])/self.Kg_c[1][1]
-        temp3 = ( self.F_c[2] - self.Kg_c[2][0] * X[0] - self.Kg_c[2][1] * X[1])/self.Kg_c[2][2]
-        last = X
-        X = [temp1,temp2,temp3]
-
-        current = abs((max(X)-max(last))/max(X)*100)
-        while(current>tolerance or i<iteration):
-            temp1 = ( self.F_c[0] - self.Kg_c[0][1] * X[1] - self.Kg_c[0][2] * X[2])/self.Kg_c[0][0]
-            temp2 = ( self.F_c[1] - self.Kg_c[1][0] * X[0] - self.Kg_c[1][2] * X[2])/self.Kg_c[1][1]
-            temp3 = ( self.F_c[2] - self.Kg_c[2][0] * X[0] - self.Kg_c[2][1] * X[1])/self.Kg_c[2][2]
-            last = X
-            X = [temp1,temp2,temp3]
-            i+=1
-            current = abs((max(X)-max(last))/max(X)*100)
-        return X
-    
     def gauss(self, iteration, tolerance):
-        X = [0,0,0]
+        X = np.zeros(len(self.F_c))
         i = 0
         last = X
         X[0]= ( self.F_c[0] - self.Kg_c[0][1] * X[1] - self.Kg_c[0][2] * X[2])/self.Kg_c[0][0]
@@ -70,7 +50,24 @@ class Ponte():
             last = X
             i+=1
             current = abs((max(X)-max(last))/max(X)*100)
+        print("N iteraçoes: ", i)
+
         return X
             
+
+    def jacobi(self, iteration, tolerance):
+        X = np.zeros(len(self.F_c))
+        
+        D = np.diag(self.Kg_c)
+        R = self.Kg_c - np.diagflat(D)
+        i = 0
+        current = 100
+        while (current>tolerance or i<iteration):
+            last = X
+            X = (self.F_c - np.dot(R,X))/ D
+            current = abs((max(X)-max(last))/max(X)*100)
+            i+=1
+        return X
+
 
 
