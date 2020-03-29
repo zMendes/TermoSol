@@ -10,6 +10,7 @@ from ponte import Ponte
 #plota(nos_coord,param)
 element = []
 nodes = []
+plota(nos_coord,param)
 dict_nos = {}
 U = np.zeros([n_nos*2])
 for i in param:
