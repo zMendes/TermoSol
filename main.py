@@ -5,6 +5,8 @@ from funcoesTermosol import importa, plota, geraSaida
 from elemento import Element 
 from ponte import Ponte
 
+ruptura = 18e6
+
 ##Pegando dados da tabela
 [n_nos, nos_coord, n_elements, param , n_force, force_matrix, n_restric, restric_matrix] = importa('entrada.xlsx')
 #plota(nos_coord,param)
@@ -33,5 +35,24 @@ ponte.setU()
 ponte.getReact()
 F,U, Epsi,Fi,Ti = ponte.makeGraph()
 geraSaida("nice",F,U, Epsi,Fi,Ti)
-#print("\nCálculo de U utilizando método de Jacobi: ", ponte.jacobi(10,0.001))
-#print("\n Cálculo de U utilizando o método de Gauss: ", ponte.gauss(10,0.1))
+quebrou = []
+deformou = []
+deslocou = []
+
+for i in Ti:
+    if np.abs(i)> ruptura:
+        quebrou.append(i)
+if (quebrou != []):
+    print("O membro ultrapassou a tensão de ruptura em tração/compressão. Membros: ",quebrou)
+
+for i in Epsi:
+    if np.abs(i)>0.5:
+        deformou.append(i)
+if (deformou != []):
+    print("Algum membro teve deformação maior do que 5%. Membros: ",deformou)
+
+for i in U:
+    if np.abs(i)>0.02:
+        deslocou.append(i)
+if (deslocou != []):
+    print("Algum nó se deslocou mais do que 20mm em X ou em Y. Membros: ", deslocou)
