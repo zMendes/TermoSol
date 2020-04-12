@@ -1,3 +1,5 @@
+# -*- Coding: UTF-8 -*-
+#coding: utf-8
 ##imports
 import math
 import numpy as np 
