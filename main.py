@@ -36,12 +36,17 @@ ponte.setU()
 #geraSaida("Nice", F,U,)
 ponte.getReact()
 F,U, Epsi,Fi,Ti = ponte.makeGraph()
-geraSaida("nice",F,U, Epsi,Fi,Ti)
+
+Epsi_ = np.matrix(Epsi)
+Fi_ = np.matrix(Fi)
+Ti_ = np.matrix(Ti)
+geraSaida("nice",F,U, Epsi_.getT(),Fi_.getT(),Ti_.getT())
 quebrou = []
 deformou = []
 deslocou = []
 
 for i in Ti:
+    # print(i)
     if np.abs(i)> ruptura:
         quebrou.append(i)
 if (quebrou != []):
